@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>🏅🦅🇺🇲 BSD CODE OF CONDUCT VIOLATION LEADERBOARD 🏅🦅🇺🇲</title>
+    <style>
+      :root {
+        --buttoncolor: rgb(220,220,220);
+        --buttonhovercolor: rgb(200,200,200);
+        
+        --background1: rgb(255,255,255);
+        --background2: rgb(230,230,230);
+        
+        --textcolor1: rgb(0,0,0);
+        --textcolor2: rgb(40,40,40);
+        
+        --linkcolor: rgb(110,110,210);
+      }
+    
+      * {
+        font-family: Sans-Serif;
+        color: var(--textcolor1);
+      }
+      
+      a {
+        color: var(--linkcolor);
+        text-decoration: none;
+      }
+      
+      a:hover {
+        text-decoration: underline;
+      }
+      
+      body {
+        background: var(--background1);
+      }
+      
+      input[type="number"] {
+        width: 140px;
+        padding: 8px;
+        border-radius: 24px;
+        text-align: center;
+        border: 3px var(--buttoncolor) solid;
+      }
+      
+      select {
+        width: 180px;
+        padding: 8px;
+        border-radius: 24px;
+        text-align: center;
+        border: 3px var(--buttoncolor) solid;
+        background: var(--background2);
+      }
+      
+      button {
+        padding: 8px;
+        border-radius: 24px;
+        background: --var(--buttoncolor);
+        border: none;
+        border: 3px var(--buttoncolor) solid;
+        cursor: pointer;
+        transition: 0.2s ease;
+      }
+      
+      button:hover {
+        background: var(--buttonhovercolor);
+      }
+      
+      footer {
+        position: fixed;
+        bottom: 0;
+        padding: 12px;
+        transform: translateX(-50%);
+        left: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codeListDiv">
+      <h3 id="brokenAmount">You have broken: 0 codes</h3>
+      <ul id="brokenList">
+        
+      </ul>
+      <button id="clearViolations">Clear List</button>
+    </div>
+    
+    <div id="addCode">
+      <p>Add Violation</p>
+      <!--<input type="number" placeholder="Code Number (1-37)" id="violationNumberInput" max="37" min="1">-->
+      <select id="violationNumberInput">
+        <!--<option value="1">Code 1 | Cheating/Lying</option>-->
+      </select>
+      
+      <!--<input type="number" placeholder="Violation Level (1-4)" id="violationLevelInput" max="4" min="1">-->
+      <select id="violationLevelInput">
+        <option value="1" >Teacher Confrontation</option>
+        <option value="2">Admin Confrontation</option>
+        <option value="3">Suspension</option>
+        <option value="4">Extended Suspension or Explusion</option>
+      </select>
+      <button id="addViolationButton">Add</button>
+    </div>
+    
+    <footer>
+      <a target="_blank" href="https://www.beaverton.k12.or.us/about-us/bsd-student-family-handbook/student-code-of-conduct">View Code of Conduct</a>
+    </footer>
+    <script>
+      window.onerror = function(err) {
+        alert(err);
+      }
+    
+      const codeNumberInput = document.getElementById('violationNumberInput');
+      const codeLevelInput = document.getElementById('violationLevelInput');
+      const codeSubmitButton = document.getElementById('addViolationButton');
+      const brokenList = document.getElementById('brokenList');
+      const clearButton = document.getElementById('clearViolations');
+      
+      var brokenCodes = [];
+      var levels = {};
+      const codeNames = [
+        "",
+        "Cheating/Lying",
+        "Alcohol",
+        "Assault",
+        "Vehicle Misuse",
+        "Bullying",
+        "Bus Misconduct",
+        "Leaving School",
+        "Drugs",
+        "Refusing to Admins",
+        "Disrupting Education",
+        "Disruptive Clothing",
+        "Threatening for money",
+        "Fighting",
+        "Fire Destruction",
+        "Igniting Fire",
+        "Lying",
+        "Gambling 🤑🤑💸",
+        "Nudity/Swearing",
+        "After/Before Hours",
+        "Medication",
+        "Physical Aggression",
+        "Dangerous Stupidity",
+        "Gangs",
+        "Sexual Harrassment",
+        "Tardiness",
+        "Technology Misuse",
+        "Theft",
+        "Tobacco",
+        "Trespassing",
+        "Unexcused Absence",
+        "Vandilism",
+        "Deadly Weapons",
+        "Explosive Weapons",
+        "Firearms",
+        "Look-a-like and/or Knives",
+        "Look-a-like Dangerous Weapons",
+        "Other Weapons"
+      ];
+      
+      if (localStorage.getItem('brokenCodes')) {
+        brokenCodes = JSON.parse(localStorage.getItem('brokenCodes'));
+        brokenCodes = Array.from(brokenCodes);
+      }
+      if (localStorage.getItem('codeLevels')) {
+        levels = localStorage.getItem('codeLevels');
+        levels = JSON.parse(levels);
+      }
+      
+      function setupOptions() {
+        codeNames.forEach(function(codeName) {
+          if (codeName !== "") {
+            var codeNum = codeNames.indexOf(codeName);
+            var item = document.createElement('option');
+            item.innerText = `Code ${codeNum} | ${codeName}`;
+            item.value = codeNum;
+            codeNumberInput.appendChild(item);
+          }
+        });
+      }
+
+      function addCode(codeNum, level) {
+        var item = document.createElement('li');
+        item.innerText = `Code ${codeNum} | ${codeNames[codeNum]} | Level ${level} Violation`;
+        brokenList.appendChild(item);
+        document.getElementById('brokenAmount').innerText = `You have broken: ${brokenCodes.length} codes`;
+        localStorage.setItem('brokenCodes', JSON.stringify(brokenCodes));
+        localStorage.setItem('codeLevels', JSON.stringify(levels));
+      }
+      
+      function updateList() {
+        if (brokenCodes.length > 0) {
+          brokenList.innerHTML = "";
+          brokenCodes.forEach(function(code) {
+            addCode(code, levels[code]);
+          });
+        document.getElementById('brokenAmount').innerText = `You have broken: ${brokenCodes.length} codes`;
+        }
+      }
+      setupOptions();
+      updateList();
+
+      codeSubmitButton.addEventListener('click', function() {
+        if (!brokenCodes.includes(codeNumberInput.value)) {
+          brokenCodes.push(codeNumberInput.value);
+          levels[codeNumberInput.value] = codeLevelInput.value;
+          addCode(codeNumberInput.value, codeLevelInput.value);
+
+          codeLevelInput.value = "1";
+          codeNumberInput.value = "1";
+        }
+      });
+      
+      clearButton.addEventListener('click', function() {
+        brokenList.innerHTML = "";
+        brokenCodes.splice(0,brokenCodes.length);
+        localStorage.clear();
+        updateList();
+        window.location.reload();
+      });
+    </script>
+  </body>
+</html>
